@@ -11,13 +11,14 @@
 void counting_sort(int *array, size_t size)
 {
     int *count_array, *sorted_array;
-    int max = 0, i, j = 0;
+    int max = 0;
+    size_t i;
 
     if (!array || size < 2)
         return;
 
     /* Find the maximum value in the array */
-    for (i = 0; i < (int)size; i++)
+    for (i = 0; i < size; i++)
     {
         if (array[i] > max)
             max = array[i];
@@ -27,15 +28,15 @@ void counting_sort(int *array, size_t size)
     count_array = malloc(sizeof(int) * (max + 1));
     if (!count_array)
         return;
-    for (i = 0; i <= max; i++)
+    for (i = 0; i <= (size_t)max; i++)
         count_array[i] = 0;
 
     /* Count occurrences of each element in the array */
-    for (i = 0; i < (int)size; i++)
+    for (i = 0; i < size; i++)
         count_array[array[i]]++;
 
     /* Update count_array to store the actual position of elements */
-    for (i = 1; i <= max; i++)
+    for (i = 1; i <= (size_t)max; i++)
         count_array[i] += count_array[i - 1];
 
     /* Create the sorted array */
@@ -47,19 +48,19 @@ void counting_sort(int *array, size_t size)
     }
 
     /* Fill the sorted array using count_array */
-    for (i = size - 1; i >= 0; i--)
+    for (i = 0; i < size; i++)
     {
         sorted_array[count_array[array[i]] - 1] = array[i];
         count_array[array[i]]--;
     }
 
     /* Copy the sorted array back to the original array */
-    for (i = 0; i < (int)size; i++)
+    for (i = 0; i < size; i++)
         array[i] = sorted_array[i];
 
     /* Print the count array */
     printf("%d", count_array[0]);
-    for (i = 1; i <= max; i++)
+    for (i = 1; i <= (size_t)max; i++)
         printf(", %d", count_array[i]);
     printf("\n");
 
