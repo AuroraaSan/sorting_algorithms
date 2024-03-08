@@ -1,63 +1,50 @@
+#include "sort.h"
+#include <stdlib.h>
+
 /**
- * counting_sort - Sorts an array of integers in ascending order using
- *                 the Counting sort algorithm
- * @array: The array to be sorted
- * @size: The size of the array
+ * counting_sort - sorts an array of integers in ascending order
+ * using the Counting sort algorithm
+ * @array: Array to be sorted
+ * @size: size of the array
+ *
+ * Return: void
  */
 void counting_sort(int *array, size_t size)
 {
-    int *count_array, *sorted_array;
-    int max = 0;
-    size_t i;
+	int *count_arr, k;
+	size_t i, j, arr_size;
 
-    if (!array || size < 2)
-        return;
+	if (array == NULL || size <= 1)
+		return;
+	arr_size = array[0];
+	for (i = 0; array[i]; i++)
+	{
+		if (array[i] > (int)arr_size)
+			arr_size = array[i];
+	}
 
-    /* Find the maximum value in the array */
-    for (i = 0; i < size; i++)
-    {
-        if (array[i] > max)
-            max = array[i];
-    }
+	arr_size += 1;
 
-    /* Create and initialize the count array */
-    count_array = malloc(sizeof(int) * (max + 1));
-    if (!count_array)
-        return;
-    for (i = 0; i <= max; i++)
-        count_array[i] = 0;
+	count_arr = malloc(arr_size * sizeof(int *));
+	if (count_arr == NULL)
+		return;
 
-    /* Count occurrences of each element in the array */
-    for (i = 0; i < size; i++)
-        count_array[array[i]]++;
+	for (i = 0; i < arr_size; i++)
+		count_arr[i] = 0;
 
-    /* Update count_array to store the actual position of elements */
-    for (i = 1; i <= max; i++)
-        count_array[i] += count_array[i - 1];
+	for (i = 0; i < size; i++)
+		count_arr[array[i]] += 1;
 
-    /* Create the sorted array */
-    sorted_array = malloc(sizeof(int) * size);
-    if (!sorted_array)
-    {
-        free(count_array);
-        return;
-    }
+	for (i = 0; i <= arr_size; i++)
+		count_arr[i] += count_arr[i - 1];
 
-    /* Fill the sorted array using count_array */
-    for (i = 0; i < size; i++)
-    {
-        sorted_array[count_array[array[i]] - 1] = array[i];
-        count_array[array[i]]--;
-    }
+	print_array(count_arr, arr_size);
 
-    /* Copy the sorted array back to the original array */
-    for (i = 0; i < size; i++)
-        array[i] = sorted_array[i];
-
-    /* Print the count array */
-    print_array(count_array, max + 1);
-
-    /* Free memory */
-    free(count_array);
-    free(sorted_array);
+	for (i = 1, j = 0; i <= arr_size; i++)
+		if (count_arr[i] != count_arr[i - 1])
+		{
+			for (k = 0; k < count_arr[i] - count_arr[i - 1]; k++)
+				array[j++] = i;
+		}
+	free(count_arr);
 }
