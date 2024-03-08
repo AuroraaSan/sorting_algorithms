@@ -1,7 +1,3 @@
-#include "sort.h"
-#include <stdio.h>
-#include <stdlib.h>
-
 /**
  * counting_sort - Sorts an array of integers in ascending order using
  *                 the Counting sort algorithm
@@ -59,10 +55,7 @@ void counting_sort(int *array, size_t size)
         array[i] = sorted_array[i];
 
     /* Print the count array */
-    printf("%d", count_array[0]);
-    for (i = 1; i <= max; i++)
-        printf(", %d", count_array[i]);
-    printf("\n");
+    print_array(count_array, max + 1);
 
     /* Free memory */
     free(count_array);
